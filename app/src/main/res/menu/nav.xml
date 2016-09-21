@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group>
+    <item
+        android:title="收藏"
+        android:id="@+id/like_nav">
+
+    </item>
+    <item
+        android:title="退出"
+        android:id="@+id/exit_nav">
+
+    </item>
+</group>
+</menu>
