@@ -1,5 +1,6 @@
 package com.feicui.learntocook.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -29,11 +30,13 @@ import retrofit2.Response;
 /**
  * Created by lenovo on 2016/9/12.
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
 //    private final String APIKEY="1217ca9885abe430e9aae68d4c55d784";
-    private final String APIKEY="eee8cc2139db056de19bb5bce2c0d5cb";
+//    private final String APIKEY="eee8cc2139db056de19bb5bce2c0d5cb";
+    private final String APIKEY="09712326e450de60408f6415b4b705f6";
+
     private TextView cookName_detail,textViewLike_detail,imtro_detail,ingredients_detail,burden_detail,textView_actionBar;
-    private ImageView titleImage_detail,back_actionBar,imageLike_detail;
+    private ImageView titleImage_detail,back_actionBar,imageLike_detail,imageShare_detail;
     private LinearLayout linearLayout;
     private String cookId="";
     private String cookName="";
@@ -102,43 +105,11 @@ public class DetailActivity extends AppCompatActivity {
 
 
             //点击返回图标关闭当前页面
-            back_actionBar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-        imageLike_detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (cookData==null){
-                    Toast.makeText(getBaseContext(),"请检查您的网络连接",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Log.d("debug","点击前isLike的状态"+isLike);
-                if (isLike==false){
-                    CookDbUtil.getsIntence(getBaseContext()).addLikeCookData(cookData);//点击后添加到收藏列表
-                    for (int i=0;i<stepslist.size();i++){
-                        cookSteps.setImg(stepslist.get(i).getImg());
-                        cookSteps.setStep(stepslist.get(i).getStep());
-                        CookDbUtil.getsIntence(getBaseContext()).addLikeCookSteps(cookSteps,cookData);
-                    }
-                    textViewLike_detail.setText("已收藏");
-                    imageLike_detail.setImageResource(R.mipmap.cang_red);
-                    isLike=true;
-                    Log.d("debug","数据库没有收藏时点击islike的状态"+isLike);
-                    Toast.makeText(getBaseContext(),"收藏成功",Toast.LENGTH_SHORT).show();
-                } else if (isLike==true){
-                    CookDbUtil.getsIntence(getBaseContext()).deleteLikeCook(cookData);
-                    textViewLike_detail.setText("收藏");
-                    imageLike_detail.setImageResource(R.mipmap.cang);
-                    isLike=false;
-                    Log.d("debug","数据库有收藏时点击islike的状态"+isLike);
-                    Toast.makeText(getBaseContext(),"已取消收藏",Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
+            back_actionBar.setOnClickListener(this);
+            //点击调用系统分享
+            imageShare_detail.setOnClickListener(this);
+            //点击收藏与取消收藏
+            imageLike_detail.setOnClickListener(this);
 
 
     }
@@ -158,6 +129,7 @@ public class DetailActivity extends AppCompatActivity {
         back_actionBar= (ImageView) findViewById(R.id.back_actionBar);//actionBar返回图标
         textView_actionBar= (TextView) findViewById(R.id.text_actionBar);//actionBar标题栏
         linearLayout= (LinearLayout) findViewById(R.id.linearLayout);
+        imageShare_detail= (ImageView) findViewById(R.id.imageShare_detail);
     }
 
     /**
@@ -247,4 +219,51 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.back_actionBar:
+                finish();
+                break;
+            case R.id.imageLike_detail:
+                addLike();
+                break;
+            case R.id.imageShare_detail:
+                Intent intent=new Intent(Intent.ACTION_SEND);//启动分享发送的属性
+                intent.setType("text/plain");//分享发送的数据类型
+                String msg="你很有想法，跟我学做菜吧";
+                intent.putExtra(Intent.EXTRA_TEXT,msg);//分享的类型及内容
+                startActivity(Intent.createChooser(intent,"选择分享"));// 目标应用选择对话框的标题
+                break;
+
+
+        }
+    }
+    private void addLike(){
+        if (cookData==null){
+            Toast.makeText(getBaseContext(),"请检查您的网络连接",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d("debug","点击前isLike的状态"+isLike);
+        if (isLike==false){
+            CookDbUtil.getsIntence(getBaseContext()).addLikeCookData(cookData);//点击后添加到收藏列表
+            for (int i=0;i<stepslist.size();i++){
+                cookSteps.setImg(stepslist.get(i).getImg());
+                cookSteps.setStep(stepslist.get(i).getStep());
+                CookDbUtil.getsIntence(getBaseContext()).addLikeCookSteps(cookSteps,cookData);
+            }
+            textViewLike_detail.setText("已收藏");
+            imageLike_detail.setImageResource(R.mipmap.cang_red);
+            isLike=true;
+            Log.d("debug","数据库没有收藏时点击islike的状态"+isLike);
+            Toast.makeText(getBaseContext(),"收藏成功",Toast.LENGTH_SHORT).show();
+        } else if (isLike==true){
+            CookDbUtil.getsIntence(getBaseContext()).deleteLikeCook(cookData);
+            textViewLike_detail.setText("收藏");
+            imageLike_detail.setImageResource(R.mipmap.cang);
+            isLike=false;
+            Log.d("debug","数据库有收藏时点击islike的状态"+isLike);
+            Toast.makeText(getBaseContext(),"已取消收藏",Toast.LENGTH_SHORT).show();
+        }
+    }
 }

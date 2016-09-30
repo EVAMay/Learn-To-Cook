@@ -76,17 +76,20 @@
                         android:id="@+id/textViewShare_detail"/>
                 </LinearLayout>
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/orange"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:text="简介"
-                />
+                android:id="@+id/textView" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/orange"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"

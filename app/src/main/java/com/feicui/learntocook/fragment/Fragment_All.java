@@ -37,8 +37,8 @@ public class Fragment_All extends Fragment implements SwipeRefreshLayout.OnRefre
     private RecyclerView recyclerView_all;
     private PtrClassicFrameLayout ptrClassicFrameLayout;//支持下拉刷新的ViewGroup
 //    private final String APIKEY="1217ca9885abe430e9aae68d4c55d784";
-    private final String APIKEY="eee8cc2139db056de19bb5bce2c0d5cb";
-    private  String PN="0";//数据返回起始下标
+    private final String APIKEY="09712326e450de60408f6415b4b705f6";
+    private  String PN="15";//数据返回起始下标
     private  String RN="15";//数据返回条数，最大30
     private String menu="";
     private int cid=0;//菜谱分类的id
@@ -80,6 +80,13 @@ public class Fragment_All extends Fragment implements SwipeRefreshLayout.OnRefre
 //            @Override
 //            public void onLoadMore() {
 //                progressBar.setVisibility(View.VISIBLE);
+//                PN=cookItemList.size()+"";
+//                //判断cid，为0就使用搜索菜谱名的方法进行联网，不为0就是用分类的方法进行联网
+//                if (cid==0){
+//                    findCook();//根据搜索菜谱名获取网络数据的方法
+//                }else {
+//                    ClassifyCook();//根据分类获取菜谱的方法
+//                }
 //
 //            }
 //
@@ -164,7 +171,7 @@ public class Fragment_All extends Fragment implements SwipeRefreshLayout.OnRefre
 //            cookItemList.add(response.body().getResult().getData().get(0));
         Log.d("debug","Fragment_all集合的长度是"+cookItemList.size());
         Log.d("debug","Fragment_all预览图的URL是："+cookItemList.get(0).getAlbums().get(0));
-        adapter.clear();
+
         adapter.addData(cookItemList);
         recyclerView_all.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView_all.setAdapter(adapter);
